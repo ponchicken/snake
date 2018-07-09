@@ -23,27 +23,15 @@ function ready() {
     canvas.setAttribute("width", config.canvas.width)
     canvas.setAttribute("height", config.canvas.height)
 
+
+
     let field = new Field(config)
-    // field.displayBlocks(ctx, field.config)
 
     let snake = new Snake()
     let game = new Game({
         ctx, field, snake
     })
 
-
-    // let field = {
-    //     width: getFieldWidth(),
-    //     height: getFieldHeight()
-    // }
-    // let blocks = getBlocksAmount()
-
-    // while ( blocks > 0 ) {
-    //     let block = document.createElement('div')
-    //     block.className = 'block'
-    //     fieldContainer.appendChild(block)
-    //     blocks--;
-    // }
 
 
 }
