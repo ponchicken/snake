@@ -43,6 +43,8 @@ export default class Game {
         e.preventDefault()
         this.snake.move(direction)
         this.field.displaySnake(this.ctx, this.snake)
+        this.field.clearRect(this.ctx, this.snake)
+        this.snake.coords.splice(0, 1)
     }
 
 }

@@ -20,9 +20,15 @@ export default class Field {
 
     displaySnake(ctx, snake) {
         console.log(snake)
-        let headCoords = snake.coords[0]
+        let headCoords = snake.coords[snake.coords.length - 1]
         let size = this.config.block.size
         ctx.fillStyle = 'rgba(55, 152, 200, 0.5)'
-        ctx.fillRect( headCoords.x, headCoords.y, size, size)
+        ctx.fillRect( headCoords.x, headCoords.y, size, size )
+    }
+
+    clearRect(ctx, snake) {
+        let tailCoords = snake.coords[0]
+        let size = this.config.block.size
+        ctx.clearRect( tailCoords.x, tailCoords.y, size, size )
     }
 }
