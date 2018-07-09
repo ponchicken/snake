@@ -16,7 +16,7 @@ export default class Game {
     }
 
     start() {
-        this.field.displaySnake(this.ctx, this.snake)
+        this.field.displaySnake(this.snake)
         this.listenKeyboard()
     }
 
@@ -42,8 +42,8 @@ export default class Game {
     moveSnake(e, direction) {
         e.preventDefault()
         this.snake.move(direction)
-        this.field.displaySnake(this.ctx, this.snake)
-        this.field.clearRect(this.ctx, this.snake)
+        this.field.displaySnake(this.snake)
+        this.field.clearRect(this.snake)
         this.snake.coords.splice(0, 1)
     }
 

@@ -10,10 +10,9 @@ export default class Snake {
 
     move(direction) {
         let size = this.config.block.size
-        let width = this.config.canvas.width
-        let height = this.config.canvas.height
+        let width = this.config.canvas.width - size
+        let height = this.config.canvas.height - size
         let lastCoords = this.coords[this.coords.length - 1]
-        let newCoord
         let {x, y} = lastCoords
 
         switch (direction) {
@@ -23,7 +22,7 @@ export default class Snake {
                 break
             case 'down': 
                 y = lastCoords.y + size
-                y = (y > height) ? 0 : y
+                y = (y > height ) ? 0 : y
                 break
             case 'left':
                 x = lastCoords.x - size
@@ -31,7 +30,7 @@ export default class Snake {
                 break
             case 'right':
                 x = lastCoords.x + size 
-                x = (x > width) ? 0 : x
+                x = (x > width ) ? 0 : x
                 break
         }
         this.coords.push({x, y})

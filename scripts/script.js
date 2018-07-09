@@ -3,6 +3,7 @@ import Snake from './snake.js'
 import Game from './Game.js'
 
 const appContainer = document.getElementById('app')
+const container = document.querySelector('.field-container')
 const canvas = document.getElementById('field')
 const ctx = canvas.getContext('2d')
 
@@ -12,7 +13,7 @@ const ctx = canvas.getContext('2d')
 function ready() {
     let config = {
         block: {
-            size: 20
+            size: 40
         },
         canvas: {
             width: canvas.offsetWidth,
@@ -20,12 +21,11 @@ function ready() {
         }
     }
 
-    canvas.setAttribute("width", config.canvas.width)
-    canvas.setAttribute("height", config.canvas.height)
 
     console.log(config)
 
-    let field = new Field(config)
+    let field = new Field(ctx, config)
+    config.canvas = field.adjustSize(container, canvas)
 
     let snake = new Snake(config)
     let game = new Game({
