@@ -23,11 +23,11 @@ function ready() {
     canvas.setAttribute("width", config.canvas.width)
     canvas.setAttribute("height", config.canvas.height)
 
-
+    console.log(config)
 
     let field = new Field(config)
 
-    let snake = new Snake()
+    let snake = new Snake(config)
     let game = new Game({
         ctx, field, snake
     })
