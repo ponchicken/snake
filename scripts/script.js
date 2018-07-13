@@ -1,6 +1,6 @@
 import Field from './field.js'
 import Snake from './snake.js'
-import Game from './Game.js'
+import Game from './game.js'
 
 const appContainer = document.getElementById('app')
 const container = document.querySelector('.field-container')
