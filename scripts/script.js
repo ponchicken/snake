@@ -9,7 +9,6 @@ const ctx = canvas.getContext('2d')
 
 
 
-
 function ready() {
     let config = {
         block: {

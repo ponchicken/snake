@@ -3,6 +3,11 @@ export default class Field {
         this.ctx = ctx
         this.config = config
         console.log(this.config.block.amount)
+   
+        this.food = [
+            { x: 40, y: 0 },
+            { x: 160, y: 0 }
+        ]
     }
 
     
@@ -36,16 +41,31 @@ export default class Field {
 
 
     displaySnake(snake) {
-        // console.log(snake)
-        let headCoords = snake.coords[snake.coords.length - 1]
         let size = this.config.block.size
         this.ctx.fillStyle = 'rgba(55, 152, 200, 0.5)'
-        this.ctx.fillRect( headCoords.x, headCoords.y, size, size )
+        snake.coords.forEach(coord => {
+            // console.log(coord)
+            this.ctx.fillRect( coord.x, coord.y, size, size )
+        })
+    }
+
+    displayFood() {
+        let size = this.config.block.size
+        this.ctx.fillStyle = 'rgba(255, 152, 155, 0.5)'
+        this.food.forEach(el => {
+            this.ctx.fillRect( el.x, el.y, size, size )
+        })
     }
 
     clearRect(snake) {
         let tailCoords = snake.coords[0]
         let size = this.config.block.size
-        this.ctx.clearRect( tailCoords.x, tailCoords.y, size, size )
+        // size + 1 fixes stripe from cleared rectangle
+        this.ctx.clearRect( tailCoords.x, tailCoords.y, size + 1, size + 1 )
+    }
+
+    clear() {
+        let { width, height } = this.config.canvas
+        this.ctx.clearRect(0, 0, width, height)
     }
 }

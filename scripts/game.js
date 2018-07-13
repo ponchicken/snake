@@ -11,40 +11,72 @@ let keyCode = {
 export default class Game {
 
     constructor({ctx, field, snake}) {
+        this.timeout
+        this.direction = 'right'
+        this.block
         Object.assign(this, {ctx, field, snake})
         this.start()
     }
 
     start() {
+        this.ctx.lineCap = 'round'
+        this.field.displayFood()
         this.field.displaySnake(this.snake)
         this.listenKeyboard()
+        this.startMovement()
     }
 
     listenKeyboard() {
         document.addEventListener('keydown', (e) => {
+            e.preventDefault()
             switch (e.keyCode) {
                 case keyCode.up:
-                    this.moveSnake(e,'up')
+                    this.changeDirection('up')
                     break
                 case keyCode.down:
-                    this.moveSnake(e,'down')
+                    this.changeDirection('down')
                     break
                 case keyCode.left:
-                    this.moveSnake(e,'left')
+                    this.changeDirection('left')
                     break
                 case keyCode.right:
-                    this.moveSnake(e,'right')
+                    this.changeDirection('right')
                     break
             }
         })
     }
 
-    moveSnake(e, direction) {
-        e.preventDefault()
+    moveSnake(direction) {
+        this.direction = direction
         this.snake.move(direction)
-        this.field.displaySnake(this.snake)
-        this.field.clearRect(this.snake)
         this.snake.coords.splice(0, 1)
+        this.checkFood()
+        this.field.clear()
+        this.field.displayFood()
+        this.field.displaySnake(this.snake)
+    }
+
+    checkFood() {
+        let snakeHead = this.snake.coords[this.snake.coords.length - 1]
+        let foodIndex = this.field.food.findIndex(food => {
+            return (food.x == snakeHead.x && food.y == snakeHead.y)
+        })
+        if (foodIndex != -1) {
+            console.log('Eaten!')
+            this.snake.size += 1
+            this.snake.coords.push(this.field.food[foodIndex])
+            this.field.food.splice(foodIndex, 1)
+        }
+    }
+
+    startMovement() {
+        this.timeout = setInterval(() => {
+            this.moveSnake(this.direction)
+        },200)
+    }
+
+    changeDirection(direction) {
+        this.direction = direction
     }
 
 }

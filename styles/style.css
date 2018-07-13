@@ -31,7 +31,7 @@ body{
     flex: 0;
     box-sizing: border-box;
     background: rgba(0,0,0,.2);
-    /* border: 5px solid rgba(255,0,0,.4); */
+    /* border: 2px solid rgba(255,0,0,.2); */
 }
 .field.adjusted{
     /* flex: 0; */
