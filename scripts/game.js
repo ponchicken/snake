@@ -15,15 +15,17 @@ export default class Game {
         this.direction = 'right'
         this.block
         Object.assign(this, {ctx, field, snake})
+        this.ctx.lineWidth = 5
+        this.ctx.lineJoin = 'round'
+        this.ctx.lineCap = 'round'
         this.start()
     }
 
     start() {
-        this.ctx.lineCap = 'round'
         this.field.displayFood()
         this.field.displaySnake(this.snake)
         this.listenKeyboard()
-        this.startMovement()
+        // this.startMovement()
     }
 
     listenKeyboard() {
@@ -77,6 +79,7 @@ export default class Game {
 
     changeDirection(direction) {
         this.direction = direction
+        this.moveSnake(this.direction)
     }
 
 }

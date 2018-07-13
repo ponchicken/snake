@@ -36,4 +36,9 @@ export default class Snake {
         this.coords.push({x, y})
         return this.coords
     }
+
+    compareCoords(newCoords) {
+        
+    }
 }
+

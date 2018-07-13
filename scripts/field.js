@@ -6,7 +6,9 @@ export default class Field {
    
         this.food = [
             { x: 40, y: 0 },
-            { x: 160, y: 0 }
+            { x: 160, y: 0 },
+            { x: 200, y: 40 },
+            { x: 160, y: 120 }
         ]
     }
 
@@ -40,32 +42,40 @@ export default class Field {
     }
 
 
-    displaySnake(snake) {
-        let size = this.config.block.size
+    displaySnake(snake, ctx = this.ctx) {
+        const size = this.config.block.size
         this.ctx.fillStyle = 'rgba(55, 152, 200, 0.5)'
-        snake.coords.forEach(coord => {
-            // console.log(coord)
+        snake.coords.forEach((coord, index) => {
             this.ctx.fillRect( coord.x, coord.y, size, size )
         })
     }
 
     displayFood() {
-        let size = this.config.block.size
+        const size = this.config.block.size
         this.ctx.fillStyle = 'rgba(255, 152, 155, 0.5)'
-        this.food.forEach(el => {
-            this.ctx.fillRect( el.x, el.y, size, size )
+        this.food.forEach(coords => {
+            this.drawCircle(coords)
+            // this.ctx.fillRect( el.x, el.y, size, size )
         })
-    }
-
-    clearRect(snake) {
-        let tailCoords = snake.coords[0]
-        let size = this.config.block.size
-        // size + 1 fixes stripe from cleared rectangle
-        this.ctx.clearRect( tailCoords.x, tailCoords.y, size + 1, size + 1 )
     }
 
     clear() {
         let { width, height } = this.config.canvas
         this.ctx.clearRect(0, 0, width, height)
     }
+
+
+    drawCircle(coords) {
+        const ctx = this.ctx
+        const radius = this.config.block.size / 2
+        const center = {
+            x: coords.x + radius,
+            y: coords.y + radius
+        }
+    
+        ctx.beginPath()
+        ctx.arc(center.x, center.y, radius / 2, 0, Math.PI * 2)
+        ctx.fill()
+    }
+
 }
