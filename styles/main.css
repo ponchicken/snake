@@ -1,24 +1,25 @@
-body{
-  padding: 0;
-  margin: 0;
-  font-family: 'Courier New', Courier, monospace;
-  line-height: 1.6;
-  background: #000;
-  background-image: linear-gradient(to bottom right, #466285, #222);
-  min-height: 100vh;
+body {
+    padding: 0;
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    line-height: 1.6;
+    background: #000;
+    /* background-image: linear-gradient(to bottom right, #466285, #222); */
+    background-image: linear-gradient(to bottom right, #96dd76, #2b5421);
+    min-height: 100vh;
 }
 
-.app{
-  padding: 30px;
-  min-height: 100vh;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: stretch;
-  align-items: stretch;
+.app {
+    padding: 30px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    align-items: stretch;
 }
 
-.field-container{
+.field-container {
     flex: 1 0 0;
     display: flex;
     flex-direction: column;
@@ -26,13 +27,13 @@ body{
     align-items: center;
     box-sizing: border-box;
 }
-.field{
+.field {
     padding: 1px;
     flex: 0;
     box-sizing: border-box;
-    background: rgba(0,0,0,.2);
+    background: rgba(0, 0, 0, 0.2);
     border: 2px solid rgba(0,0,0,.2);
 }
-.field.adjusted{
+.field.adjusted {
     /* flex: 0; */
 }

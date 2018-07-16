@@ -1,4 +1,27 @@
-import { generateRandomCoords, pickRandomObjKey } from './helpers.js'
+import { generateRandomCoords, pickRandomObjKey, removeDuplicates } from './helpers.js'
+
+const sources = [
+    {
+        title: 'head',
+        src: `/images/snake/head.svg`
+    },
+    {
+        title: 'body',
+        src: `/images/snake/body.svg`
+    },
+    {
+        title: 'curve',
+        src: `/images/snake/curve.svg`
+    },
+    {
+        title: 'tail',
+        src: `/images/snake/tail.svg`
+    },
+    {
+        title: 'little',
+        src: `/images/snake/little.svg`
+    }
+]
 
 export default class Field {
     constructor(ctx, config, canvas) {
@@ -8,33 +31,33 @@ export default class Field {
         this.food = []
 
         this.foodTypes = {
-            orange: {
+            mushroom: {
                 color: 'rgba(255, 152, 155, 0.5)',
                 scores: 20
             },
             apple: {
                 color: 'rgba(152, 255, 155, 0.5)',
                 scores: 30
+            },
+            banana: {
+                color: 'yellow',
+                scores: 40
             }
         }
+
+        addFoodTypesToImages(this.foodTypes)
+
+        
+        loadImages(sources)
+            .then(images => this.images = images)
     }
 
 
-    displaySnake(snake, ctx = this.ctx) {
-        const lineWidth = this.config.lineWidth
-        const size = this.config.blockSize - lineWidth * 2
-        this.ctx.fillStyle = 'rgba(55, 152, 200, 0.5)'
-        snake.coords.forEach((coord, index) => {
-            if (index == snake.coords.length - 1)
-                this.ctx.fillStyle = 'rgba(155, 152, 200, 0.5)'
-            let {x,y} = {
-                x: coord.x + lineWidth,
-                y: coord.y + lineWidth
-            }
-            this.ctx.fillRect( x, y, size, size )
-            this.ctx.strokeRect(x, y, size, size)
-        })
+    clear() {
+        let { width, height } = this.canvas
+        this.ctx.clearRect(0, 0, width, height)
     }
+
 
     createFood(additionalCoords = []) {
         let foodCoords = generateRandomCoords([...additionalCoords, ...this.food], this.config)
@@ -45,8 +68,12 @@ export default class Field {
     }
 
     displayFood(food) {
-        this.ctx.fillStyle = this.foodTypes[food.type].color
-        this.drawCircle(food)
+        let foodType = this.foodTypes[food.type]
+        // let coords = getSmallerCoords(this.config.blockSize, food)
+        // this.ctx.drawImage(this.images[food.type], coords.x, coords.y, coords.size, coords.size)
+        this.ctx.drawImage(this.images[food.type], food.x, food.y, this.config.blockSize, this.config.blockSize)
+            // this.ctx.fillStyle = foodType.color
+            // this.drawCircle(food)
     }
 
     displayAllFood() {
@@ -55,14 +82,35 @@ export default class Field {
         })
     }
 
-    clear() {
-        let { width, height } = this.canvas
-        this.ctx.clearRect(0, 0, width, height)
+
+
+    displaySnake(snake, from, to) {
+        const ctx = this.ctx
+        const size = this.config.blockSize
+        
+        let filtered = removeDuplicates(snake.coords)
+        filtered.forEach((coord, index) => {
+                //TODO check directions from and to
+                let img
+                if (filtered.length == 1) {
+                    img = this.images['little']
+                }
+                else if (index == 0) {
+                    img = this.images['tail']
+                }
+                else if (index == filtered.length - 1) {
+                    img = this.images['head']
+                }
+                else {
+                    img = this.images['body']
+                }
+
+
+                ctx.drawImage(img, coord.x, coord.y, size, size)
+            })
     }
 
-
     drawCircle(coords) {
-        // console.log('Drawing', coords)
         const ctx = this.ctx
         const radius = this.config.blockSize / 2
         const center = {
@@ -75,4 +123,40 @@ export default class Field {
         ctx.fill()
     }
 
+    drawCrescent(coords) {
+        ctx.beginPath();
+        ctx.moveTo(50,20);
+        ctx.bezierCurveTo(230, 30, 150, 60, 50, 100);
+        ctx.bezierCurveTo(230, 30, 150, 60, 50, 100);
+        ctx.fill();
+    }
+
+}
+
+
+
+function addFoodTypesToImages(foodTypes){
+    Object.keys(foodTypes).forEach(type => {
+        sources.push({
+            title: type,
+            src: `/images/food2/${type}.svg`
+        })
+    })
+}
+
+function loadImages(images) {
+    let result = {}
+
+    return new Promise((resolve, rej) => {
+        images.forEach((img, index) => {
+            result[img.title] = new Image()
+            result[img.title].onload = () => {
+                if (index == images.length - 1) {
+                    console.log(result)
+                    resolve(result)
+                }
+            }
+            result[img.title].src = img.src
+        })
+    })
 }

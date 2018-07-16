@@ -54,14 +54,14 @@ export default class Game {
     moveSnake() {
         try {
             this.snake.move(this.direction, this.prevDirection)
+            this.snake.coords.splice(0, 1)
         } catch (err) {
             console.log(err.message)
         }
-        this.snake.coords.splice(0, 1)
         this.checkFood()
         this.field.clear()
         this.field.displayAllFood()
-        this.field.displaySnake(this.snake)
+        this.field.displaySnake(this.snake, this.prevDirection, this.direction)
     }
 
     checkFood() {
