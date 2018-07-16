@@ -1,60 +1,66 @@
+import Snake from "./snake.js";
 
-let keyCode = {
-    up: 38,
-    down: 40,
-    left: 37,
-    right: 39,
-    space: 32,
-    enter: 13
+
+let opposites = {
+    up: 'down',
+    down: 'up',
+    left: 'right',
+    right: 'left'
 }
 
 export default class Game {
 
-    constructor({ctx, field, snake}) {
-        this.timeout
-        this.direction = 'right'
-        this.block
-        Object.assign(this, {ctx, field, snake})
-        this.ctx.lineWidth = 5
-        this.ctx.lineJoin = 'round'
-        this.ctx.lineCap = 'round'
-        this.start()
+    constructor(app) {
+        this.field = app.field
+        this.app = app
+
+        this.prevDirection
+        this.started = false
+        this.pause = true
+    }
+
+    toggle() {
+        if (!this.started) {
+            this.started = true
+            this.start()
+        }
+
+        this.pause = !this.pause
+
+        if (!this.app.debug) {
+            if (this.pause) {
+                this.stopMovement()
+            } else {
+                this.startMovement()
+            }
+        }
     }
 
     start() {
-        this.field.displayFood()
+        this.snake = new Snake(this.app.config, this.app.canvas)
+        this.field.displayAllFood()
         this.field.displaySnake(this.snake)
-        this.listenKeyboard()
-        // this.startMovement()
-    }
 
-    listenKeyboard() {
-        document.addEventListener('keydown', (e) => {
-            e.preventDefault()
-            switch (e.keyCode) {
-                case keyCode.up:
-                    this.changeDirection('up')
-                    break
-                case keyCode.down:
-                    this.changeDirection('down')
-                    break
-                case keyCode.left:
-                    this.changeDirection('left')
-                    break
-                case keyCode.right:
-                    this.changeDirection('right')
-                    break
+        
+        document.addEventListener('click', () => {
+            this.field.createFood(this.snake.coords)
+            try{
+            } catch (err) {
+                console.log(err.message)
             }
         })
     }
 
-    moveSnake(direction) {
-        this.direction = direction
-        this.snake.move(direction)
+    moveSnake() {
+        try {
+            this.snake.move(this.direction, this.prevDirection)
+        } catch (err) {
+            console.log(err.message)
+        }
         this.snake.coords.splice(0, 1)
         this.checkFood()
         this.field.clear()
-        this.field.displayFood()
+        this.field.displayAllFood()
         this.field.displaySnake(this.snake)
     }
 
@@ -64,22 +70,51 @@ export default class Game {
             return (food.x == snakeHead.x && food.y == snakeHead.y)
         })
         if (foodIndex != -1) {
-            console.log('Eaten!')
+            let existedFood = this.field.food[foodIndex] 
+            if (this.field.food.length < 3) {
+                this.field.createFood(this.snake.coords)
+            }
+            let foodType = this.field.foodTypes[existedFood.type]
+            this.app.addScores(foodType.scores)
             this.snake.size += 1
-            this.snake.coords.push(this.field.food[foodIndex])
+            this.snake.coords.push({
+                x: existedFood.x,
+                y: existedFood.y,
+                // color: foodType.color
+            })
             this.field.food.splice(foodIndex, 1)
         }
     }
 
     startMovement() {
-        this.timeout = setInterval(() => {
-            this.moveSnake(this.direction)
-        },200)
+        this.movementInterval = setInterval(() => {
+            this.moveSnake()
+        }, 50)
+        this.foodAppearInterval = setInterval(() => {
+            try{
+                this.field.createFood(this.snake.coords)
+            } catch (err) {
+                console.log(err.message)
+            }
+        }, 2000)
+    }
+
+    stopMovement() {
+        clearInterval(this.movementInterval)
+        clearInterval(this.foodAppearInterval)
     }
 
     changeDirection(direction) {
-        this.direction = direction
-        this.moveSnake(this.direction)
+        if (!this.pause) {
+            this.prevDirection = this.direction
+            if (opposites[direction] != this.prevDirection) {
+                console.log(direction, this.prevDirection)
+                this.direction = direction
+            }
+            
+            if (this.app.debug) 
+                this.moveSnake(this.direction)
+        }
     }
 
 }

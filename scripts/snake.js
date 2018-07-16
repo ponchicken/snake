@@ -1,6 +1,10 @@
+import { checkCoords } from './helpers.js'
+
+
 export default class Snake {
-    constructor(config) {
+    constructor(config, canvas) {
         this.config = config
+        this.canvas = canvas
         this.coords = [{
             x: 0,
             y: 0
@@ -9,12 +13,12 @@ export default class Snake {
     }
 
     move(direction) {
-        let size = this.config.block.size
-        let width = this.config.canvas.width - size
-        let height = this.config.canvas.height - size
+        let size = this.config.blockSize
+        let width = this.canvas.width - size
+        let height = this.canvas.height - size
         let lastCoords = this.coords[this.coords.length - 1]
-        let {x, y} = lastCoords
-
+        let {x, y} = lastCoords 
+        
         switch (direction) {
             case 'up':
                 y = lastCoords.y - size
@@ -33,12 +37,15 @@ export default class Snake {
                 x = (x > width ) ? 0 : x
                 break
         }
-        this.coords.push({x, y})
+        
+        if (checkCoords(this.coords, {x, y}))
+            throw new Error('BUM!!')
+        
+        this.coords.push({x,y})
+        
         return this.coords
     }
 
-    compareCoords(newCoords) {
-        
-    }
+
 }
 

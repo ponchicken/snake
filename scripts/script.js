@@ -1,41 +1,16 @@
-import Field from './field.js'
-import Snake from './snake.js'
-import Game from './game.js'
-
-const appContainer = document.getElementById('app')
-const container = document.querySelector('.field-container')
-const canvas = document.getElementById('field')
-const ctx = canvas.getContext('2d')
-
+import App from './app.js'
 
 
 function ready() {
-    let config = {
-        block: {
-            size: 40
-        },
-        canvas: {
-            width: canvas.offsetWidth,
-            height: canvas.offsetHeight
-        }
+    let app = new App()
+
+    if (app.debug) {
+        document.addEventListener('click', () => {
+            console.log(app.scores)
+        })
     }
 
-
-    console.log(config)
-
-    let field = new Field(ctx, config)
-    config.canvas = field.adjustSize(container, canvas)
-
-    let snake = new Snake(config)
-    let game = new Game({
-        ctx, field, snake
-    })
-
-
-
 }
-
-
 
 
 document.addEventListener("DOMContentLoaded", ready);
