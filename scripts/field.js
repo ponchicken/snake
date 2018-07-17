@@ -25,23 +25,33 @@ const sources = [
 
 export default class Field {
     constructor(ctx, config, canvas, app) {
+        this.debug = app.debug
         this.ctx = ctx
         this.config = config
         this.canvas = canvas
         this.food = []
 
         this.foodTypes = {
+            pizza: {
+                size: 5
+            },
+            cookie: {
+                size: 1
+            },
+            pie: {
+                size: 3
+            },
+            tomato: {
+                size: 2
+            },
             mushroom: {
-                color: 'rgba(255, 152, 155, 0.5)',
-                scores: 20
+                size: 2
             },
             apple: {
-                color: 'rgba(152, 255, 155, 0.5)',
-                scores: 30
+                size: 1
             },
             banana: {
-                color: 'yellow',
-                scores: 40
+                size: 2
             }
         }
 
@@ -92,15 +102,10 @@ export default class Field {
         
         let filtered = removeDuplicates(snake.coords, ['x', 'y'])
         filtered.forEach((coord, index) => {
-            //TODO check directions from and to
-            // if (!compareObjects(prev, coord)) {
-
-            // }
 
             let img
             if (filtered.length == 1) {
                 img = 'little'
-                // size *= 1.5
             } else if (index == 0) {
                 img = 'head'
             } else if (index == filtered.length - 1) {
@@ -132,8 +137,10 @@ export default class Field {
                     degrees += 270
                     break
             }
+            if (this.debug)
+                ctx.fillRect(coord.x, coord.y, 2, 2)
+
             ctx.save()
-            ctx.fillRect(coord.x, coord.y, 2, 2)
             ctx.translate(coord.x + radius, coord.y + radius)
             ctx.rotate(degrees*Math.PI/180)
             ctx.translate(-radius, -radius)
@@ -142,6 +149,7 @@ export default class Field {
             ctx.restore()
             degrees = 0
         })
+        console.groupEnd('some')
     }
 
     drawCircle(coords) {

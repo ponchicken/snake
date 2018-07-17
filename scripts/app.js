@@ -19,10 +19,10 @@ let keyCode = {
 
 export default class App {
     constructor() {
-        this.debug = true
+        this.debug = false
 
         this.config = {
-            blockSize: 50,
+            blockSize: 30,
             lineWidth: 2,
             directions: {
                 up: 'h',

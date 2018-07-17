@@ -14,7 +14,8 @@ export default class Game {
         this.field = app.field
         this.app = app
 
-        this.prevDirection
+        this.direction = 'right'
+        this.prevDirection = 'right'
         this.started = false
         this.pause = true
     }
@@ -38,6 +39,7 @@ export default class Game {
 
     start() {
         this.snake = new Snake(this.app.config, this.app.canvas)
+        this.field.createFood(this.snake.coords)
         this.field.displayAllFood()
         this.field.displaySnake(this.snake)
 
@@ -75,13 +77,15 @@ export default class Game {
                 this.field.createFood(this.snake.coords)
             }
             let foodType = this.field.foodTypes[existedFood.type]
-            this.app.addScores(foodType.scores)
-            this.snake.size += 1
+            this.app.addScores(foodType.size)
+            this.snake.size += foodType.size
             let coords = {
                 x: existedFood.x,
                 y: existedFood.y
             }
-            this.snake.coords.push(coords)
+            for (let i=0; i<foodType.size; i++) {
+                this.snake.coords.push(coords)
+            }
             this.field.food.splice(foodIndex, 1)
         }
     }
@@ -89,14 +93,17 @@ export default class Game {
     startMovement() {
         this.movementInterval = setInterval(() => {
             this.moveSnake()
-        }, 50)
+            this.changeDirection(this.direction, true)
+        }, 80)
         this.foodAppearInterval = setInterval(() => {
+            console.log(this.field.food.length)
             try{
-                this.field.createFood(this.snake.coords)
+                if (this.field.food.length < 4)
+                    this.field.createFood(this.snake.coords)
             } catch (err) {
                 console.log(err.message)
             }
-        }, 2000)
+        }, 5000)
     }
 
     stopMovement() {
@@ -104,16 +111,19 @@ export default class Game {
         clearInterval(this.foodAppearInterval)
     }
 
-    changeDirection(direction) {
+    changeDirection(direction, changePrev) {
         if (!this.pause) {
+            if (this.app.debug || changePrev) {
+                this.prevDirection = this.direction
+            }
+
             let directions = this.app.config.directions
-            this.prevDirection = this.direction
             if (directions[direction] != directions[this.prevDirection]) {
                 this.direction = direction
             }
             
             if (this.app.debug) 
-                this.moveSnake(this.direction)
+                this.moveSnake()
         }
     }
 

@@ -7,11 +7,12 @@ function ready() {
 
 
 
-    if (app.debug) {
+    // if (app.debug) {
         document.addEventListener('click', () => {
             console.log(app.scores)
+            console.log(app.game.snake)
         })
-    }
+    // }
 
 }
 
