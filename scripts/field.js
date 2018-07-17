@@ -3,23 +3,23 @@ import { generateRandomCoords, pickRandomObjKey, removeDuplicates, compareObject
 const sources = [
     {
         title: 'head',
-        src: `/images/snake/head.svg`
+        src: `images/snake/head.svg`
     },
     {
         title: 'body',
-        src: `/images/snake/body.svg`
+        src: `images/snake/body.svg`
     },
     {
         title: 'curve',
-        src: `/images/snake/curve.svg`
+        src: `images/snake/curve.svg`
     },
     {
         title: 'tail',
-        src: `/images/snake/tail.svg`
+        src: `images/snake/tail.svg`
     },
     {
         title: 'little',
-        src: `/images/snake/little.svg`
+        src: `images/snake/little.svg`
     }
 ]
 
@@ -173,7 +173,7 @@ function addFoodTypesToImages(foodTypes){
     Object.keys(foodTypes).forEach(type => {
         sources.push({
             title: type,
-            src: `/images/food2/${type}.svg`
+            src: `images/food2/${type}.svg`
         })
     })
 }
