@@ -54,18 +54,18 @@ export default class Game {
     moveSnake() {
         try {
             this.snake.move(this.direction, this.prevDirection)
-            this.snake.coords.splice(0, 1)
+            this.snake.coords.pop()
         } catch (err) {
             console.log(err.message)
         }
         this.checkFood()
         this.field.clear()
         this.field.displayAllFood()
-        this.field.displaySnake(this.snake, this.prevDirection, this.direction)
+        this.field.displaySnake(this.snake)
     }
 
     checkFood() {
-        let snakeHead = this.snake.coords[this.snake.coords.length - 1]
+        let snakeHead = this.snake.coords[0]
         let foodIndex = this.field.food.findIndex(food => {
             return (food.x == snakeHead.x && food.y == snakeHead.y)
         })
@@ -77,11 +77,11 @@ export default class Game {
             let foodType = this.field.foodTypes[existedFood.type]
             this.app.addScores(foodType.scores)
             this.snake.size += 1
-            this.snake.coords.push({
+            let coords = {
                 x: existedFood.x,
-                y: existedFood.y,
-                // color: foodType.color
-            })
+                y: existedFood.y
+            }
+            this.snake.coords.push(coords)
             this.field.food.splice(foodIndex, 1)
         }
     }
@@ -106,9 +106,9 @@ export default class Game {
 
     changeDirection(direction) {
         if (!this.pause) {
+            let directions = this.app.config.directions
             this.prevDirection = this.direction
-            if (opposites[direction] != this.prevDirection) {
-                console.log(direction, this.prevDirection)
+            if (directions[direction] != directions[this.prevDirection]) {
                 this.direction = direction
             }
             

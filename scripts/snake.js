@@ -8,15 +8,18 @@ export default class Snake {
         this.coords = [{
             x: 0,
             y: 0
+        },{
+            x: 0,
+            y: 0
         }]
         this.size = 1
     }
 
-    move(direction) {
+    move(direction, prevDirection) {
         let size = this.config.blockSize
         let width = this.canvas.width - size
         let height = this.canvas.height - size
-        let lastCoords = this.coords[this.coords.length - 1]
+        let lastCoords = this.coords[0]
         let {x, y} = lastCoords 
         
         switch (direction) {
@@ -41,7 +44,15 @@ export default class Snake {
         if (checkCoords(this.coords, {x, y}))
             throw new Error('BUM!!')
         
-        this.coords.push({x,y})
+        lastCoords.to = direction
+        lastCoords.from = prevDirection
+
+        this.coords.unshift({
+            x,
+            y,
+            to: direction,
+            from: prevDirection
+        })
         
         return this.coords
     }

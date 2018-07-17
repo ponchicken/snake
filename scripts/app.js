@@ -22,9 +22,16 @@ export default class App {
         this.debug = true
 
         this.config = {
-            blockSize: 20,
-            lineWidth: 2
+            blockSize: 50,
+            lineWidth: 2,
+            directions: {
+                up: 'h',
+                right: 'v',
+                down: 'h',
+                left: 'v',
+            }
         }
+
 
         this.ctx = canvasEl.getContext('2d')
         this.ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)'
@@ -37,9 +44,9 @@ export default class App {
         this.setCanvasParams()
         adjustCanvasSize(this.canvas)
 
-        this.field = new Field(this.ctx, this.config, this.canvas)
+        this.field = new Field(this.ctx, this.config, this.canvas, this)
         this.game = new Game(this)
-
+        
         this.startListeners()
     }
 

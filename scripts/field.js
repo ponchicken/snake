@@ -1,4 +1,4 @@
-import { generateRandomCoords, pickRandomObjKey, removeDuplicates } from './helpers.js'
+import { generateRandomCoords, pickRandomObjKey, removeDuplicates, compareObjects } from './helpers.js'
 
 const sources = [
     {
@@ -24,7 +24,7 @@ const sources = [
 ]
 
 export default class Field {
-    constructor(ctx, config, canvas) {
+    constructor(ctx, config, canvas, app) {
         this.ctx = ctx
         this.config = config
         this.canvas = canvas
@@ -49,7 +49,10 @@ export default class Field {
 
         
         loadImages(sources)
-            .then(images => this.images = images)
+            .then(images => {
+                this.images = images
+                app.game.toggle()
+            })
     }
 
 
@@ -69,11 +72,7 @@ export default class Field {
 
     displayFood(food) {
         let foodType = this.foodTypes[food.type]
-        // let coords = getSmallerCoords(this.config.blockSize, food)
-        // this.ctx.drawImage(this.images[food.type], coords.x, coords.y, coords.size, coords.size)
         this.ctx.drawImage(this.images[food.type], food.x, food.y, this.config.blockSize, this.config.blockSize)
-            // this.ctx.fillStyle = foodType.color
-            // this.drawCircle(food)
     }
 
     displayAllFood() {
@@ -84,30 +83,65 @@ export default class Field {
 
 
 
-    displaySnake(snake, from, to) {
+    displaySnake(snake) {
         const ctx = this.ctx
-        const size = this.config.blockSize
+        let size = this.config.blockSize
+        const radius = size / 2
+        let degrees = 0
+        const directions = this.config.directions
         
-        let filtered = removeDuplicates(snake.coords)
+        let filtered = removeDuplicates(snake.coords, ['x', 'y'])
         filtered.forEach((coord, index) => {
-                //TODO check directions from and to
-                let img
-                if (filtered.length == 1) {
-                    img = this.images['little']
-                }
-                else if (index == 0) {
-                    img = this.images['tail']
-                }
-                else if (index == filtered.length - 1) {
-                    img = this.images['head']
-                }
-                else {
-                    img = this.images['body']
-                }
+            //TODO check directions from and to
+            // if (!compareObjects(prev, coord)) {
 
+            // }
 
-                ctx.drawImage(img, coord.x, coord.y, size, size)
-            })
+            let img
+            if (filtered.length == 1) {
+                img = 'little'
+                // size *= 1.5
+            } else if (index == 0) {
+                img = 'head'
+            } else if (index == filtered.length - 1) {
+                img = 'tail'
+            } else if (coord.from != coord.to) {
+                img = 'curve'
+
+                Object.keys(this.config.directions).forEach((dir, index, directions) => {
+                    let nextIndex = (directions[index + 1]) ? index + 1 : 0
+                    if (coord.from == dir && coord.to == directions[nextIndex]) {
+                        degrees += 90
+                    }
+                })
+            } else {
+                img = 'body'
+            }
+
+            switch (coord.to) {
+                case 'up':
+                    degrees += 0
+                    break
+                case 'right':
+                    degrees += 90
+                    break
+                case 'down':
+                    degrees += 180
+                    break
+                case 'left':
+                    degrees += 270
+                    break
+            }
+            ctx.save()
+            ctx.fillRect(coord.x, coord.y, 2, 2)
+            ctx.translate(coord.x + radius, coord.y + radius)
+            ctx.rotate(degrees*Math.PI/180)
+            ctx.translate(-radius, -radius)
+            ctx.drawImage(this.images[img], 0, 0, size, size)
+
+            ctx.restore()
+            degrees = 0
+        })
     }
 
     drawCircle(coords) {
@@ -121,14 +155,6 @@ export default class Field {
         ctx.beginPath()
         ctx.arc(center.x, center.y, radius / 2, 0, Math.PI * 2)
         ctx.fill()
-    }
-
-    drawCrescent(coords) {
-        ctx.beginPath();
-        ctx.moveTo(50,20);
-        ctx.bezierCurveTo(230, 30, 150, 60, 50, 100);
-        ctx.bezierCurveTo(230, 30, 150, 60, 50, 100);
-        ctx.fill();
     }
 
 }

@@ -45,13 +45,18 @@ export function getSmallerCoords(blockSize, coords) {
     }
 }
 
-export function removeDuplicates(array) {
-    let keys = Object.keys(array[0])
+export function removeDuplicates(array, keys) {
+    keys = keys || Object.keys(array[0])
     return array.filter((item, index) => {
         return array.findIndex(foundItem => {
-            return keys.every(key => {
-                return foundItem[key] == item[key]
-            })
+            return compareObjects(item, foundItem, keys)
         }) == index
+    })
+}
+
+export function compareObjects(obj1, obj2, keys) {
+    keys = keys || Object.keys(obj1)
+    return keys.every(key => {
+        return obj1[key] == obj2[key]
     })
 }
