@@ -1,17 +1,11 @@
-import { checkCoords } from './helpers.js'
+import { checkCoords, generateRandomCoords } from './helpers.js'
 
 
 export default class Snake {
     constructor(config, canvas) {
         this.config = config
         this.canvas = canvas
-        this.coords = [{
-            x: 0,
-            y: 0
-        },{
-            x: 0,
-            y: 0
-        }]
+        this.defineCoords()
         this.size = 1
     }
 
@@ -55,6 +49,17 @@ export default class Snake {
         })
         
         return this.coords
+    }
+
+    defineCoords() {
+        let coords = generateRandomCoords(this.config)
+        this.coords = [{
+            x: coords.x,
+            y: coords.y
+        },{
+            x: coords.x,
+            y: coords.y
+        }]
     }
 
 

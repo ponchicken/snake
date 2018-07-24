@@ -1,5 +1,5 @@
 
-export function generateRandomCoords(exclude, config) {
+export function generateRandomCoords(config, exclude = []) {
   if (exclude.length >= config.blocksAmount.sum) {
     throw new Error('field full')
   }
@@ -8,7 +8,7 @@ export function generateRandomCoords(exclude, config) {
       y: Math.round(Math.random() * (config.blocksAmount.vertical - 1)) * config.blockSize
   }
 
-  return (checkCoords(exclude, coords)) ? generateRandomCoords(exclude, config) : coords
+  return (checkCoords(exclude, coords)) ? generateRandomCoords(config, exclude) : coords
 }
 
 export function checkCoords(array, newCoords) {

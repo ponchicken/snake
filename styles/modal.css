@@ -1,37 +1,86 @@
 .modal{
-  display: none;
-  position: absolute;
-  top: 10px;
-  bottom: 10px;
-  left: 10px;
-  right: 10px;
-  color: #eee;
-  background: rgba(0,0,0,.5);
-  border: 2px solid #555;
-  padding: 40px;
-  text-align: center;
+    display: none;
+    position: absolute;
+    top: 10px;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    color: #eee;
+    background: rgba(0,0,0,.8);
+    border: 2px solid rgba(0, 0, 0, 0.5);
+    padding: 40px;
+    text-align: center;
 }
 
 .modal.active{
-  display: block;
+    display: block;
 }
 
-.modal .modal-gameover{
-  display: none;
-}
-.modal .modal-description{
-  display: block;
+.modal .starter{
+    display: block;
 }
 
-.modal.gameover .modal-gameover{
-  display: block;
+.gameover{
+    display: none;
 }
-.modal.gameover .modal-description{
-  display: none;
+
+.modal-gameover .gameover{
+    display: block;
+}
+.modal-gameover .starter{
+    display: none;
 }
 
 .modal-title{
-  margin: 0 0 20px;
-  font-size: 30px;
-  color: #fff4aa;
+    margin: 0 0 20px;
+    font-size: 30px;
+    color: #fff4aa;
+}
+
+.modal-theme{
+    margin: 10px 0;
+}
+.modal button{
+    font-family: monospace;
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    color: #eee;
+    background: #3a6;
+    cursor: pointer;
+}
+.modal button:hover{
+    opacity: 0.8;
+}
+.modal button.active{
+    background: #31566c;
+}
+
+.modal-block-size{
+    margin: 10px 0;
+}
+.modal input{
+    font-family: monospace;
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    width: 120px;
+    text-align: center;
+    background: #eee;
+}
+
+.modal-description-text{
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #aaa;
+}
+.modal-description-text p{
+    margin-top: 0;
+}
+
+.gameover-scores{
+    font-size: 20px;
+    margin: 0 0 15px;
 }

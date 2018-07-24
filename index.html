@@ -16,18 +16,17 @@
             <canvas id="field" class="field"></canvas>
         </div>
 
-        <div class="modal" id="modal">
-            <div class="modal-description">
-                <h1 class="modal-title">The Snake Game</h1>
-                <div class="mofal-description-text">
-                    <p>This is the snake game developed on pure vanilla Javascript</p>
-                    <p>Press Space to start the game</p>
-                    <button class="game-start">Start the game</button>
-                </div>
+        <div class="modal active" id="modal">
+            <h1 class="modal-title"><span class="starter">The Snake Game</span><span class="gameover">Game Over</span></h1>
+            <div class="modal-themes">
+                <span>Theme:</span>
+                <button class="theme" data-theme="forest">forest</button>
+                <button class="theme" data-theme="dune">dune</button>
+                <button class="theme" data-theme="neon">neon</button>
             </div>
-            <div class="modal-gameover">
-                <h1 class="modal-title">Game Over</h1>
-                <div class="gameover-scores">Total scores: <span>0</span></div>
+            <div class="modal-description-text">
+                <p class="starter">Press Space or button below to start the game</p>
+                <div class="gameover-scores gameover">Total scores: <span>0</span></div>
                 <button class="game-start">Start the game</button>
             </div>
         </div>

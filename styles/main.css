@@ -5,18 +5,24 @@ body {
     line-height: 1.6;
     background: #000;
     /* background-image: linear-gradient(to bottom right, #466285, #222); */
-    background-image: linear-gradient(to bottom right, #96dd76, #2b5421);
+    background-image: linear-gradient(to top left, #1e2429, #214d54);
     min-height: 100vh;
 }
 
 .app {
-    padding: 30px;
+    padding: 50px;
+    padding-top: 30px;
     min-height: 100vh;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: stretch;
     align-items: stretch;
+}
+.app-scores{
+    font-size: 20px;
+    font-weight: bold;
+    color: #111;
 }
 
 .field-container {
@@ -33,7 +39,45 @@ body {
     box-sizing: border-box;
     background: rgba(0, 0, 0, 0.2);
     border: 2px solid rgba(0,0,0,.2);
+    border-radius: 3px;
 }
 .field.adjusted {
     /* flex: 0; */
+}
+
+
+.app.forest{
+    background: url(../images/forest/forest2.jpg) repeat center
+}
+.app.forest .field{
+    background: url(../images/forest/grass.jpg) repeat center
+}
+
+
+.app.dune{
+    background: url(../images/dune/land.svg) no-repeat center;
+    background-size: cover;
+}
+.app.dune .field{
+    background: rgba(139, 100, 75, 0.38);
+}
+
+@keyframes colorchange
+{
+    0%   {background: #1e0a52;}
+    25%  {background: #520a3c;}
+    50%  {background: #150a52;}
+    75%  {background: #000000;}
+    100% {background: #350c0c;}
+}
+
+.app.neon{
+    background: #000;
+    animation: colorchange 20s infinite;
+}
+.app.neon .field{
+    background: #05151a;
+}
+.app.neon .app-scores{
+    color: #672bff;
 }

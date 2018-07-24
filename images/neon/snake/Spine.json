@@ -1,0 +1,20 @@
+{"skeleton":{"images":""},
+"bones":[{"name":"root"}],
+"slots":[
+	{"name":"little","bone":"root","attachment":"little"},
+	{"name":"curve","bone":"root","attachment":"curve"},
+	{"name":"body","bone":"root","attachment":"body"},
+	{"name":"head","bone":"root","attachment":"head"},
+	{"name":"tail","bone":"root","attachment":"tail"}
+],
+"skins":{
+	"default":{
+		"little":{"little":{"x":,"y":,"width":,"height":}},
+		"curve":{"curve":{"x":,"y":,"width":,"height":}},
+		"body":{"body":{"x":,"y":,"width":,"height":}},
+		"head":{"head":{"x":,"y":,"width":,"height":}},
+		"tail":{"tail":{"x":,"y":,"width":,"height":}}
+	}
+},
+"animations":{"animation":{}}
+}

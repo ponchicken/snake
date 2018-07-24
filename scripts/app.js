@@ -1,12 +1,15 @@
 import Field from './field.js'
 import Game from './game.js'
 
+const appEl = document.querySelector('.app')
 const container = document.querySelector('.field-container')
 const canvasEl = document.getElementById('field')
 const scoresEl = document
     .getElementById('scores')
     .querySelector('span')
 const modal = document.getElementById('modal')
+const themeButtons = modal.querySelector('.modal-themes')
+const gameoverScoresEl = modal.querySelector('.gameover-scores span')
 
 let keyCode = {
     up: 38,
@@ -22,7 +25,8 @@ export default class App {
         this.debug = false
 
         this.config = {
-            blockSize: 30,
+            blockSize: 40,
+            theme: localStorage.getItem('theme') || 'forest',
             lineWidth: 2,
             directions: {
                 up: 'h',
@@ -31,6 +35,16 @@ export default class App {
                 left: 'v',
             }
         }
+
+        this.sound = {
+            bg: new Audio('/sound/song.mp3'),
+            over: new Audio('/sound/gameover.mp3')
+        }
+        this.sound.bg.loop = true
+
+        Object.keys(this.sound).map(key => {
+            this.sound[key].volume  = 0.3
+        })
 
 
         this.ctx = canvasEl.getContext('2d')
@@ -46,6 +60,8 @@ export default class App {
 
         this.field = new Field(this.ctx, this.config, this.canvas, this)
         this.game = new Game(this)
+
+        this.setTheme(this.config.theme)
         
         this.startListeners()
     }
@@ -54,7 +70,6 @@ export default class App {
         let {blockSize} = this.config
         let horizontal = Math.floor(container.offsetWidth / blockSize)
         let vertical = Math.floor(container.offsetHeight / blockSize)
-        console.log(blockSize)
         this.canvas = {
             width: horizontal * blockSize,
             height: vertical * blockSize
@@ -71,15 +86,32 @@ export default class App {
         scoresEl.textContent = this.scores
     }
 
-    gameOver() {}
+    gameOver() {
+        this.game.toggle()
+        this.game.started = false
+        this.sound.bg.currentTime = 0
+        this.sound.over.play()
+        modal.classList.add('modal-gameover')
+        this.modalToggle()
+        gameoverScoresEl.textContent = this.scores
+        this.scores = 0
+        scoresEl.textContent = 0
+    }
 
 
     startListeners() {
-        modal.addEventListener('click', function (e) {
+        modal.addEventListener('click', (e) => {
             let classes = e.target.classList
-            if (classes.includes('game-start')) {
-                // this.game.start()
-                console.log('game start')
+            if (classes.contains('game-start')) {
+                this.field.clear()
+                this.game.toggle()
+                this.game.snake.defineCoords()
+                this.modalToggle()
+                modal.classList.remove('modal-gameover')
+            } else if (classes.contains('theme')) {
+                this.setTheme(e.target.dataset.theme)
+                this.field.reloadImages()
+
             }
         })
         
@@ -95,14 +127,34 @@ export default class App {
                 case keyCode.left:
                     this.game.changeDirection('left')
                     break
-                case keyCode.right: 
+                case keyCode.right:
                     this.game.changeDirection('right')
                     break
                 case keyCode.space:
                     this.game.toggle()
+                    this.modalToggle()
                     break
             }
         })
+    }
+
+    modalToggle() {
+        modal.classList.toggle('active')
+    }
+
+    setTheme(theme) {
+        this.theme = theme
+        console.log(this.theme)
+        localStorage.setItem('theme', this.theme)
+        this.field.theme = this.theme
+
+        let prevThemeEl = themeButtons.querySelector('.active')
+        if (prevThemeEl) {
+            prevThemeEl.classList.remove('active')
+            appEl.classList.remove(prevThemeEl.dataset.theme)
+        }
+        appEl.classList.add(this.theme)
+        themeButtons.querySelector(`[data-theme=${this.theme}]`).classList.add('active')
     }
 
 }

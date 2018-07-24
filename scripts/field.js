@@ -1,27 +1,5 @@
 import { generateRandomCoords, pickRandomObjKey, removeDuplicates, compareObjects } from './helpers.js'
 
-const sources = [
-    {
-        title: 'head',
-        src: `images/snake/head.svg`
-    },
-    {
-        title: 'body',
-        src: `images/snake/body.svg`
-    },
-    {
-        title: 'curve',
-        src: `images/snake/curve.svg`
-    },
-    {
-        title: 'tail',
-        src: `images/snake/tail.svg`
-    },
-    {
-        title: 'little',
-        src: `images/snake/little.svg`
-    }
-]
 
 export default class Field {
     constructor(ctx, config, canvas, app) {
@@ -32,37 +10,35 @@ export default class Field {
         this.food = []
 
         this.foodTypes = {
-            pizza: {
+            // coffee: {
+            //     size: 5
+            // },
+            // carrot: {
+            //     size: 1
+            // },
+            // candy: {
+            //     size: 3
+            // },
+            // tomato: {
+            //     size: 2
+            // },
+            // mushroom: {
+            //     size: 2
+            // },
+            // banana: {
+            //     size: 2
+            // }
+            pineapple: {
                 size: 5
             },
-            cookie: {
-                size: 1
-            },
-            pie: {
-                size: 3
-            },
-            tomato: {
-                size: 2
-            },
-            mushroom: {
-                size: 2
-            },
             apple: {
-                size: 1
-            },
-            banana: {
                 size: 2
-            }
+            },
         }
 
-        addFoodTypesToImages(this.foodTypes)
-
-        
-        loadImages(sources)
-            .then(images => {
-                this.images = images
-                app.game.toggle()
-            })
+        this.theme = this.config.theme
+        this.defineImageSources()
+        this.reloadImages()
     }
 
 
@@ -73,7 +49,7 @@ export default class Field {
 
 
     createFood(additionalCoords = []) {
-        let foodCoords = generateRandomCoords([...additionalCoords, ...this.food], this.config)
+        let foodCoords = generateRandomCoords(this.config, [...additionalCoords, ...this.food])
         let foodType = pickRandomObjKey(this.foodTypes)
         let food = { ...foodCoords, type: foodType}
         this.food.push(food)
@@ -149,8 +125,8 @@ export default class Field {
             ctx.restore()
             degrees = 0
         })
-        console.groupEnd('some')
     }
+
 
     drawCircle(coords) {
         const ctx = this.ctx
@@ -165,18 +141,53 @@ export default class Field {
         ctx.fill()
     }
 
-}
-
-
-
-function addFoodTypesToImages(foodTypes){
-    Object.keys(foodTypes).forEach(type => {
-        sources.push({
-            title: type,
-            src: `images/food2/${type}.svg`
+    addFoodTypesToImages(foodTypes){
+        Object.keys(foodTypes).forEach(type => {
+            this.sources.push({
+                title: type,
+                src: `images/${this.theme}/food/${type}.svg`
+            })
         })
-    })
+    }
+
+    reloadImages() {
+        console.log(this.theme)
+        this.defineImageSources()
+        loadImages(this.sources)
+            .then(images => {
+                this.images = images
+            })
+    }
+
+    defineImageSources() {
+        this.sources = [
+            {
+                title: 'head',
+                src: `images/${this.theme}/snake/head.svg`
+            },
+            {
+                title: 'body',
+                src: `images/${this.theme}/snake/body.svg`
+            },
+            {
+                title: 'curve',
+                src: `images/${this.theme}/snake/curve.svg`
+            },
+            {
+                title: 'tail',
+                src: `images/${this.theme}/snake/tail.svg`
+            },
+            {
+                title: 'little',
+                src: `images/${this.theme}/snake/little.svg`
+            }
+        ]
+        this.addFoodTypesToImages(this.foodTypes)
+    }
 }
+
+
+
 
 function loadImages(images) {
     let result = {}
@@ -186,7 +197,6 @@ function loadImages(images) {
             result[img.title] = new Image()
             result[img.title].onload = () => {
                 if (index == images.length - 1) {
-                    console.log(result)
                     resolve(result)
                 }
             }
