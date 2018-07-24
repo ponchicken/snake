@@ -37,8 +37,8 @@ export default class App {
         }
 
         this.sound = {
-            bg: new Audio('/sound/song.mp3'),
-            over: new Audio('/sound/gameover.mp3')
+            bg: new Audio('sound/song.mp3'),
+            over: new Audio('sound/gameover.mp3')
         }
         this.sound.bg.loop = true
 
