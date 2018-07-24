@@ -87,12 +87,15 @@ export default class App {
     }
 
     gameOver() {
-        this.game.toggle()
-        this.game.started = false
-        this.sound.bg.currentTime = 0
         this.sound.over.play()
         modal.classList.add('modal-gameover')
+        this.game.toggle()
         this.modalToggle()
+    }
+
+    clearGameData() {
+        this.game.started = false
+        this.sound.bg.currentTime = 0
         gameoverScoresEl.textContent = this.scores
         this.scores = 0
         scoresEl.textContent = 0
@@ -155,6 +158,8 @@ export default class App {
         }
         appEl.classList.add(this.theme)
         themeButtons.querySelector(`[data-theme=${this.theme}]`).classList.add('active')
+
+        this.clearGameData()
     }
 
 }
