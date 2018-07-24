@@ -35,7 +35,7 @@ export default class Field {
                 size: 2
             },
         }
-
+        
         this.theme = this.config.theme
         this.defineImageSources()
         this.reloadImages()
@@ -151,9 +151,8 @@ export default class Field {
     }
 
     reloadImages() {
-        console.log(this.theme)
         this.defineImageSources()
-        loadImages(this.sources)
+        loadImages(this.sources, this.config.blockSize)
             .then(images => {
                 this.images = images
             })
@@ -189,12 +188,14 @@ export default class Field {
 
 
 
-function loadImages(images) {
+function loadImages(images, size) {
     let result = {}
 
     return new Promise((resolve, rej) => {
         images.forEach((img, index) => {
             result[img.title] = new Image()
+            result[img.title].width = size
+            result[img.title].height = size
             result[img.title].onload = () => {
                 if (index == images.length - 1) {
                     resolve(result)
