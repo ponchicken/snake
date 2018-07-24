@@ -10,10 +10,13 @@
     border: 2px solid rgba(0, 0, 0, 0.5);
     padding: 40px;
     text-align: center;
+
+    flex-direction: column;
+    justify-content: center;
 }
 
 .modal.active{
-    display: block;
+    display: flex;
 }
 
 .modal .starter{
@@ -33,7 +36,7 @@
 
 .modal-title{
     margin: 0 0 20px;
-    font-size: 30px;
+    font-size: 40px;
     color: #fff4aa;
 }
 
@@ -43,7 +46,7 @@
 .modal button{
     font-family: monospace;
     padding: 10px 20px;
-    font-size: 18px;
+    font-size: 25px;
     border: none;
     border-radius: 5px;
     color: #eee;

@@ -2,6 +2,7 @@ body {
     padding: 0;
     margin: 0;
     font-family: 'Courier New', Courier, monospace;
+    font-size: 22px;
     line-height: 1.6;
     background: #000;
     /* background-image: linear-gradient(to bottom right, #466285, #222); */
@@ -19,8 +20,12 @@ body {
     justify-content: stretch;
     align-items: stretch;
 }
+.app-head{
+    display: flex;
+    justify-content: center;
+}
 .app-scores{
-    font-size: 20px;
+    font-size: 25px;
     font-weight: bold;
     color: #111;
 }
