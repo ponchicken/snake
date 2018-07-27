@@ -83,6 +83,7 @@ export default class App {
 
     addScores(scores) {
         this.scores += scores
+        console.log(this.scores)
         scoresEl.textContent = this.scores
     }
 
@@ -91,6 +92,7 @@ export default class App {
         modal.classList.add('modal-gameover')
         this.game.toggle()
         this.modalToggle()
+        this.clearGameData()
     }
 
     clearGameData() {
